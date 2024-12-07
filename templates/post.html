@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Gaming Central</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>Gaming Central</h1>
+    <nav class="nav-container">
+        <div class="nav-links">
+            <a href="/" class="nav-item">Головна</a>
+            {% if is_admin %}
+                <a href="/add" class="nav-item" target="_blank">Додати статтю</a>
+            {% endif %}
+        </div>
+        <div class="auth-links">
+            {% if not user_authenticated %}
+                <a href="/login" class="nav-item">Авторизація</a>
+                <a href="/register" class="nav-item">Реєстрація</a>
+            {% else %}
+                <a href="/logout" class="nav-item">Вийти</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="search-container">
+        <form class="search-form" action="/search" method="get" onsubmit="return false;">
+            <input type="text" id="searchQuery" placeholder="Пошук..." oninput="searchArticles()">
+            <button type="submit">Знайти</button>
+        </form>
+    </div>
+
+    <div class="filter-container">
+        <button id="filter-button">Фільтрувати</button>
+        <div id="filter-options" class="hidden">
+            <ul>
+                <li><button class="filter-option" data-filter="date">За датою</button></li>
+                <li><button class="filter-option" data-filter="rating">За рейтингом</button></li>
+                <li><button class="filter-option" data-filter="alphabet">За алфавітом</button></li>
+                <li>
+                    <button id="category-filter-button">За категоріями</button>
+                    <ul id="category-list" class="hidden">
+                        <li><button class="filter-category" data-category="Огляди ігор">Огляди ігор</button></li>
+                        <li><button class="filter-category" data-category="Новини ігор">Новини ігор</button></li>
+                        <li><button class="filter-category" data-category="Ігрові платформи">Ігрові платформи</button></li>
+                        <li><button class="filter-category" data-category="Ігрові гайды та поради">Ігрові гайды та поради</button></li>
+                        <li><button class="filter-category" data-category="Ігрові події та виставки">Ігрові події та виставки</button></li>
+                        <li><button class="filter-category" data-category="Моди та кастомізація">Моди та кастомізація</button></li>
+                        <li><button class="filter-category" data-category="Ігрове обладнання">Ігрове обладнання</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <article class="post-detail">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <p class="post-content">{{ post.content }}</p>
+        <p class="post-category"><strong>Категорія:</strong> {{ post.category }}</p>
+
+        <!-- Кнопки для редагування та видалення -->
+        {% if is_admin %}
+            <div class="post-actions">
+                <a href="/post/{{ post.id }}/edit" class="button edit-button">Редагувати</a>
+                <form action="/post/{{ post.id }}/delete" method="POST" style="display:inline;">
+                    <!-- Додаткове поле для підтвердження методу POST -->
+                    <input type="hidden" name="_method" value="POST">
+                    <button type="submit" class="button delete-button" onclick="return confirm('Ви впевнені, що хочете видалити статтю?');">Видалити</button>
+                </form>
+            </div>
+        {% endif %}
+
+
+        <section class="reviews">
+            <h3 class="reviews-title">Відгуки</h3>
+            <form method="POST" action="/post/{{ post.id }}/review" class="review-form">
+                <label for="rating" class="rating-label">Ваша оцінка (1-5):</label>
+                <select id="rating" name="rating" class="rating-select" required>
+                    <option value="">Оберіть оцінку</option>
+                    <option value="1">1 - Дуже погано</option>
+                    <option value="2">2 - Погано</option>
+                    <option value="3">3 - Непогано</option>
+                    <option value="4">4 - Добре</option>
+                    <option value="5">5 - Відмінно</option>
+                </select>
+
+                <label for="comment" class="comment-label">Ваш коментар:</label>
+                <textarea id="comment" name="comment" class="comment-textarea" rows="3" placeholder="Напишіть ваш коментар..." required></textarea>
+
+                <button type="submit" class="submit-button">Додати</button>
+            </form>
+
+            {% if post.reviews %}
+                <h4 class="all-reviews-title">Усі відгуки</h4>
+                <div class="review-list">
+                    {% for review in post.reviews %}
+                        <div class="review">
+                            <p class="review-rating"><strong>Оцінка:</strong> {{ review.rating }}</p>
+                            <p class="review-comment">{{ review.comment }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-reviews">Ще немає відгуків. Будьте першим!</p>
+            {% endif %}
+        </section>
+    </article>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2024 Gaming Central. Усі права захищені.</p>
+</footer>
+</body>
+</html>

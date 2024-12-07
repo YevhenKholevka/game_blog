@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагувати статтю - Gaming Central</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>Gaming Central</h1>
+    <nav class="nav-container">
+        <div class="nav-links">
+            <a href="/" class="nav-item">Головна</a>
+            {% if is_admin %}
+                <a href="/add" class="nav-item" target="_blank">Додати статтю</a>
+            {% endif %}
+        </div>
+        <div class="auth-links">
+            {% if not user_authenticated %}
+                <a href="/login" class="nav-item">Авторизація</a>
+                <a href="/register" class="nav-item">Реєстрація</a>
+            {% else %}
+                <a href="/logout" class="nav-item">Вийти</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="search-container">
+        <form class="search-form" action="/search" method="get" onsubmit="return false;">
+            <input type="text" id="searchQuery" placeholder="Пошук..." oninput="searchArticles()">
+            <button type="submit">Знайти</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <article class="edit-post">
+        <h1>Редагувати статтю: {{ post.title }}</h1>
+
+        <form method="POST" action="/post/{{ post.id }}/edit">
+            <!-- Форма редагування -->
+            <div class="form-group">
+                <label for="title">Заголовок:</label>
+                <input type="text" id="title" name="title" value="{{ post.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Контент:</label>
+                <textarea id="content" name="content" rows="6" required>{{ post.content }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Категорія:</label>
+                <select id="category" name="category" required>
+                    <option value="">Оберіть категорію</option>
+                    <option value="Огляди ігор" {% if post.category == "Огляди ігор" %}selected{% endif %}>Огляди ігор</option>
+                    <option value="Новини ігор" {% if post.category == "Новини ігор" %}selected{% endif %}>Новини ігор</option>
+                    <option value="Ігрові платформи" {% if post.category == "Ігрові платформи" %}selected{% endif %}>Ігрові платформи</option>
+                    <option value="Ігрові гайды та поради" {% if post.category == "Ігрові гайды та поради" %}selected{% endif %}>Ігрові гайды та поради</option>
+                    <option value="Ігрові події та виставки" {% if post.category == "Ігрові події та виставки" %}selected{% endif %}>Ігрові події та виставки</option>
+                    <option value="Моди та кастомізація" {% if post.category == "Моди та кастомізація" %}selected{% endif %}>Моди та кастомізація</option>
+                    <option value="Ігрове обладнання" {% if post.category == "Ігрове обладнання" %}selected{% endif %}>Ігрове обладнання</option>
+                </select>
+            </div>
+            <button type="submit" class="button">Зберегти зміни</button>
+        </form>
+    </article>
+</main>
+
+<footer>
+    <p>&copy; 2024 Gaming Central. Усі права захищені.</p>
+</footer>
+</body>
+</html>

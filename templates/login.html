@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизація</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>Gaming Central</h1>
+    <nav class="nav-container">
+        <div class="nav-links">
+            <a href="/" class="nav-item">Головна</a>
+            {% if is_admin %}
+                <a href="/add" class="nav-item" target="_blank">Додати статтю</a>
+            {% endif %}
+        </div>
+        <div class="auth-links">
+            {% if not user_authenticated %}
+                <a href="/login" class="nav-item">Авторизація</a>
+                <a href="/register" class="nav-item">Реєстрація</a>
+            {% else %}
+                <a href="/logout" class="nav-item">Вийти</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="search-container">
+        <form class="search-form" action="/search" method="get">
+            <input type="text" name="query" placeholder="Пошук...">
+            <button type="submit">Знайти</button>
+        </form>
+    </div>
+    <div class="filter-container">
+        <button id="filter-button">Фільтрувати</button>
+        <div id="filter-options" class="hidden">
+            <ul>
+                <li><button class="filter-option" data-filter="date">За датою</button></li>
+                <li><button class="filter-option" data-filter="rating">За рейтингом</button></li>
+                <li><button class="filter-option" data-filter="alphabet">За алфавітом</button></li>
+                <li>
+                    <button id="category-filter-button">За категоріями</button>
+                    <ul id="category-list" class="hidden">
+                        <li><button class="filter-category" data-category="Огляди ігор">Огляди ігор</button></li>
+                        <li><button class="filter-category" data-category="Новини ігор">Новини ігор</button></li>
+                        <li><button class="filter-category" data-category="Ігрові платформи">Ігрові платформи</button></li>
+                        <li><button class="filter-category" data-category="Ігрові гайды та поради">Ігрові гайды та поради</button></li>
+                        <li><button class="filter-category" data-category="Ігрові події та виставки">Ігрові події та виставки</button></li>
+                        <li><button class="filter-category" data-category="Моди та кастомізація">Моди та кастомізація</button></li>
+                        <li><button class="filter-category" data-category="Ігрове обладнання">Ігрове обладнання</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+    <main>
+        <section class="auth-container">
+            <h2>Авторизація</h2>
+            <form method="post" action="/login">
+                <label for="username">Ім'я користувача:</label>
+                <input type="text" id="username" name="username" placeholder="Ваш логін" required>
+
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" placeholder="Ваш пароль" required>
+
+                <button type="submit">Увійти</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Gaming Central. Усі права захищені.</p>
+    </footer>
+</body>
+</html>

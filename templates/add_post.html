@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додати статтю</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>Gaming Central</h1>
+    <nav class="nav-container">
+        <div class="nav-links">
+            <a href="/" class="nav-item">Головна</a>
+            {% if is_admin %}
+                <a href="/add" class="nav-item" target="_blank">Додати статтю</a>
+            {% endif %}
+        </div>
+        <div class="auth-links">
+            {% if not user_authenticated %}
+                <a href="/login" class="nav-item">Авторизація</a>
+                <a href="/register" class="nav-item">Реєстрація</a>
+            {% else %}
+                <a href="/logout" class="nav-item">Вийти</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="search-container">
+        <form class="search-form" action="/search" method="get" onsubmit="return false;">
+            <input type="text" id="searchQuery" placeholder="Пошук..." oninput="searchArticles()">
+            <button type="submit">Знайти</button>
+        </form>
+    </div>
+
+    <div class="filter-container">
+        <button id="filter-button">Фільтрувати</button>
+        <div id="filter-options" class="hidden">
+            <ul>
+                <li><button class="filter-option" data-filter="date">За датою</button></li>
+                <li><button class="filter-option" data-filter="rating">За рейтингом</button></li>
+                <li><button class="filter-option" data-filter="alphabet">За алфавітом</button></li>
+                <li>
+                    <button id="category-filter-button">За категоріями</button>
+                    <ul id="category-list" class="hidden">
+                        <li><button class="filter-category" data-category="Огляди ігор">Огляди ігор</button></li>
+                        <li><button class="filter-category" data-category="Новини ігор">Новини ігор</button></li>
+                        <li><button class="filter-category" data-category="Ігрові платформи">Ігрові платформи</button></li>
+                        <li><button class="filter-category" data-category="Ігрові гайды та поради">Ігрові гайды та поради</button></li>
+                        <li><button class="filter-category" data-category="Ігрові події та виставки">Ігрові події та виставки</button></li>
+                        <li><button class="filter-category" data-category="Моди та кастомізація">Моди та кастомізація</button></li>
+                        <li><button class="filter-category" data-category="Ігрове обладнання">Ігрове обладнання</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="add-post-container">
+        <h1>Додати нову статтю</h1>
+        <form action="/add" method="POST">
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title" name="title" required>
+            <br>
+            <label for="content">Зміст:</label>
+            <textarea id="content" name="content" required></textarea>
+            <br>
+            <label for="category">Категорія:</label>
+            <select id="category" name="category" required>
+                <option value="Огляди ігор">Огляди ігор</option>
+                <option value="Новини ігор">Новини ігор</option>
+                <option value="Ігрові платформи">Ігрові платформи</option>
+                <option value="Ігрові гайды та поради">Ігрові гайды та поради</option>
+                <option value="Ігрові події та виставки">Ігрові події та виставки</option>
+                <option value="Моди та кастомізація">Моди та кастомізація</option>
+                <option value="Ігрове обладнання">Ігрове обладнання</option>
+            </select>
+            <button type="submit">Додати</button>
+        </form>
+        </div>
+    </main>
+
+
+    <footer>
+        <p>&copy; 2024 Блог. Всі права захищені.</p>
+    </footer>
+
+    <script src="/static/scripts.js"></script>
+</body>
+</html>
